@@ -585,9 +585,11 @@
       
       // Add event listener for results rendering
       document.addEventListener('resultsRendered', (event) => {
+        console.log('resultsRendered event received:', event.detail);
         const { userName, scores } = event.detail;
         
         // Render visualizations
+        console.log('Rendering visualizations with scores:', scores);
         visualizationManager.renderVisualizations(scores);
         
         // Generate interpretation
