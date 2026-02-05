@@ -214,8 +214,64 @@ class QuestionnaireController {
     window.navigateTo = this.navigateTo.bind(this);
   }
   
+  // Check if assessment is complete enough to show results
+  isAssessmentComplete() {
+    // Count total responses
+    let totalResponses = 0;
+    let requiredResponses = 0;
+    
+    ['part1', 'part2'].forEach(part => {
+      ['dopamine', 'acetylcholine', 'gaba', 'serotonin'].forEach(neurotransmitter => {
+        ['memoryAttention', 'physical', 'personality', 'character'].forEach(category => {
+          const responses = this.state.responses[part][neurotransmitter][category];
+          if (responses) {
+            totalResponses += Object.keys(responses).length;
+          }
+        });
+      });
+    });
+    
+    // Require at least 50% completion (about 119 questions)
+    requiredResponses = 119;
+    return totalResponses >= requiredResponses;
+  }
+  
+  // Get completion percentage
+  getCompletionPercentage() {
+    let totalResponses = 0;
+    const totalQuestions = 237; // Total questions in the assessment
+    
+    ['part1', 'part2'].forEach(part => {
+      ['dopamine', 'acetylcholine', 'gaba', 'serotonin'].forEach(neurotransmitter => {
+        ['memoryAttention', 'physical', 'personality', 'character'].forEach(category => {
+          const responses = this.state.responses[part][neurotransmitter][category];
+          if (responses) {
+            totalResponses += Object.keys(responses).length;
+          }
+        });
+      });
+    });
+    
+    return Math.round((totalResponses / totalQuestions) * 100);
+  }
+
   // Navigation function
   navigateTo(sectionId) {
+    // Special handling for results section - check completion
+    if (sectionId === 'results') {
+      const completionPct = this.getCompletionPercentage();
+      if (completionPct < 50) {
+        const proceed = confirm(
+          `You have only completed ${completionPct}% of the assessment.\n\n` +
+          `Results will be incomplete and may not be accurate.\n\n` +
+          `Do you want to view partial results anyway?`
+        );
+        if (!proceed) {
+          return; // Don't navigate to results
+        }
+      }
+    }
+    
     // Hide all sections
     document.querySelectorAll('section').forEach(section => {
       section.classList.remove('active');
@@ -273,7 +329,14 @@ class QuestionnaireController {
     document.querySelectorAll('.nav-link').forEach(link => {
       const sectionId = link.getAttribute('data-section');
       
-      if (this.state.sectionProgress[sectionId]) {
+      // Results should only show completed if assessment is sufficiently done
+      if (sectionId === 'results') {
+        if (this.getCompletionPercentage() >= 50 && this.state.sectionProgress[sectionId]) {
+          link.classList.add('completed');
+        } else {
+          link.classList.remove('completed');
+        }
+      } else if (this.state.sectionProgress[sectionId]) {
         link.classList.add('completed');
       }
       
@@ -704,11 +767,15 @@ class QuestionnaireController {
   }
   
   dispatchEvent(event, data) {
-    if (!this.eventListeners[event]) return;
+    // Call internal listeners
+    if (this.eventListeners[event]) {
+      this.eventListeners[event].forEach(callback => {
+        callback(data);
+      });
+    }
     
-    this.eventListeners[event].forEach(callback => {
-      callback(data);
-    });
+    // Also dispatch as DOM CustomEvent so index.html listeners work
+    document.dispatchEvent(new CustomEvent(event, { detail: data }));
   }
 }
 
