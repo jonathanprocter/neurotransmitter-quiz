@@ -118,6 +118,14 @@ class RadarChartVisualizer {
         plugins: {
           legend: {
             position: 'top',
+            align: 'center',
+            labels: {
+              boxWidth: 12,
+              padding: 8,
+              font: {
+                size: 11
+              }
+            }
           },
           tooltip: {
             callbacks: {
