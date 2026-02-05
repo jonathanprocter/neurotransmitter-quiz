@@ -462,11 +462,11 @@ section.active {
   background: white;
   border-radius: var(--border-radius-md);
   box-shadow: 0 2px 8px var(--clr-shadow);
-  min-height: 350px;
 }
 
 .chart-container canvas {
-  max-height: 300px;
+  width: 100% !important;
+  height: 280px !important;
 }
 
 .chart-title {

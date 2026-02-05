@@ -103,6 +103,8 @@ class RadarChartVisualizer {
         ]
       },
       options: {
+        responsive: true,
+        maintainAspectRatio: true,
         scales: {
           r: {
             angleLines: {
@@ -121,10 +123,11 @@ class RadarChartVisualizer {
             align: 'center',
             labels: {
               boxWidth: 12,
-              padding: 8,
+              padding: 6,
               font: {
                 size: 11
-              }
+              },
+              usePointStyle: true
             }
           },
           tooltip: {
