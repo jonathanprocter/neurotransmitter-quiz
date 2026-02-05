@@ -466,7 +466,16 @@ section.active {
 
 .chart-container canvas {
   width: 100% !important;
-  height: 280px !important;
+  max-width: 100%;
+}
+
+/* First chart container (radar) needs more height for legend */
+.chart-container:first-of-type {
+  min-height: 320px;
+}
+
+.chart-container:first-of-type canvas {
+  height: 260px !important;
 }
 
 .chart-title {
