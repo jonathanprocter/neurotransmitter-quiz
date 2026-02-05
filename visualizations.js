@@ -117,22 +117,16 @@ class RadarChartVisualizer {
             }
           }
         },
-        layout: {
-          padding: 20
-        },
         plugins: {
           legend: {
             display: true,
             position: 'top',
             labels: {
-              boxWidth: 10,
-              boxHeight: 10,
-              padding: 15,
+              boxWidth: 12,
+              padding: 10,
               font: {
-                size: 11
-              },
-              usePointStyle: true,
-              pointStyle: 'rectRounded'
+                size: 12
+              }
             }
           },
           tooltip: {

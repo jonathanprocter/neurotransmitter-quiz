@@ -462,20 +462,7 @@ section.active {
   background: white;
   border-radius: var(--border-radius-md);
   box-shadow: 0 2px 8px var(--clr-shadow);
-}
-
-.chart-container canvas {
-  width: 100% !important;
-  max-width: 100%;
-}
-
-/* First chart container (radar) needs more height for legend */
-.chart-container:first-of-type {
-  min-height: 320px;
-}
-
-.chart-container:first-of-type canvas {
-  height: 260px !important;
+  min-height: 300px;
 }
 
 .chart-title {
